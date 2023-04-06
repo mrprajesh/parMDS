@@ -1,6 +1,14 @@
 //~~~START:Thu, 16-Jun-2022, 12:43:32 IST
+// For GECCO'23 Submission.
 // g++ -O3 -Wall -o "seqMDS".out "seqMDS.cpp"  -std=c++14  
 
+/*
+ * Rajesh Pandian M | https://mrprajesh.co.in
+ * Somesh Singh     | https://ssomesh.github.io
+ * Rupesh Nasre     | www.cse.iitm.ac.in/~rupesh
+ * N.S.Narayanaswamy| www.cse.iitm.ac.in/~swamy
+ * MIT LICENSE
+ */ 
 #include <iostream>
 #include <vector>
 #include <set>

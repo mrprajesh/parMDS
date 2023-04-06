@@ -1,6 +1,13 @@
 //~~~START:Thu, 16-Jun-2022, 12:43:32 IST
 // For GECCO'23 Submission.
 // nvc++ -O3 -std=c++14 -acc=multicore  parMDS.cpp -o parMDS.out && time ./parMDS.out toy.vrp 32
+/*
+ * Rajesh Pandian M | https://mrprajesh.co.in
+ * Somesh Singh     | https://ssomesh.github.io
+ * Rupesh Nasre     | www.cse.iitm.ac.in/~rupesh
+ * N.S.Narayanaswamy| www.cse.iitm.ac.in/~swamy
+ * MIT LICENSE
+ */ 
 
 #include <iostream>
 #include <vector>
