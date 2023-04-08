@@ -37,6 +37,19 @@ using node_t = int;  // let's keep as int than unsigned. -1 is init. nodes ids 0
 
 const node_t DEPOT = 0;  // CVRP depot is always assumed to be zero.
 
+// To store all cmd line params in one struct
+class Params{
+public:
+  Params(){
+    toRound  = 1 ; // DEFAULT is round
+    nThreads = 20; // DEFAULT is 20 OMP threads
+  }
+  ~Params(){}
+  
+  bool toRound;
+  short nThreads;
+};
+
 class Edge {
   public:
   node_t to;
@@ -94,6 +107,7 @@ class VRP {
   public:
   vector<Point> node;
   vector<weight_t> dist;
+  Params params;
 
   size_t getSize() const {
     return size;
@@ -117,8 +131,9 @@ VRP::cal_graph_dist() {
   for (size_t i = 0; i < size; ++i) {
     for (size_t j = i + 1; j < size; ++j) {
       weight_t w = sqrt(((node[i].x - node[j].x) * (node[i].x - node[j].x)) + ((node[i].y - node[j].y) * (node[i].y - node[j].y)));
-
-      dist[k] = w;
+        
+      dist[k] = (params.toRound ? round(w) : w); //TO round or not to. 
+      
       nG[i].push_back(Edge(j, w));
       nG[j].push_back(Edge(i, w));
       //~ printf("k=%zd d[%zd][%zd]=%lf\n",k,i,j,w);
@@ -674,10 +689,26 @@ bool verify_sol(const VRP &vrp, vector<vector<node_t>> final_routes, unsigned ca
 int main(int argc, char *argv[]) {
   VRP vrp;
   if (argc < 2) {
-    std::cout << "parMDS version 1.0" << '\n';
-    std::cout << "Usage: " << argv[0] << " toy.vrp [numThreads. Default 20]" << '\n';
+    std::cout << "parMDS version 1.1" << '\n';
+    std::cout << "Usage: " << argv[0] << " toy.vrp [-nthreads <n> DEFAULT is 20] [-round 0 or 1 DEFAULT:1]" << '\n';
     exit(1);
   }
+  
+  for(int ii = 2; ii < argc ; ii+=2){
+    if (std::string(argv[ii]) == "-round")
+					vrp.params.toRound = atoi(argv[ii+1]) ;
+    else if (std::string(argv[ii]) == "-nthreads")
+					vrp.params.nThreads = atoi(argv[ii+1]);
+    else {
+      std::cerr<< "INVALID Arguments!" << '\n';
+      std::cerr<< "Usage:" << argv[0] << " toy.vrp -nthreads 20 -round 1" << '\n';
+      exit(1);
+    }
+  }
+  
+  // DEBUG
+  // std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << " nThreads:" << vrp.params.nThreads << '\n';
+
   vrp.read(argv[1]);
 
   // START TIMER
@@ -734,8 +765,8 @@ int main(int argc, char *argv[]) {
   uint64_t elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
   
   auto timeUpto1 = (double)(elapsed * 1.E-9);
-  short PARLIMIT = ((argc == 3) ? stoi(argv[2]) : 20);  //Default stride is 20 if arg 3 is not provided!
-
+  //~ short PARLIMIT = ((argc == 3) ? stoi(argv[2]) : 20);  //Default stride is 20 if arg 3 is not provided!
+  short PARLIMIT = vrp.params.nThreads;
   
 #pragma omp parallel for shared(minCost, minRoute)   
 

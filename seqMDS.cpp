@@ -38,6 +38,19 @@ using node_t = int;  // let's keep as int than unsigned. -1 is init. nodes ids 0
 
 const node_t DEPOT = 0;  // CVRP depot is always assumed to be zero.
 
+// Cmdline params
+class Params{
+public:
+  Params(){
+    toRound  = 1 ; // DEFAULT is round
+    //~ nThreads = 20; // DEFAULT is 20 OMP threads
+  }
+  ~Params(){}
+  
+  bool toRound;
+  //~ short nThreads;
+};
+
 class Edge {
   public:
   node_t to;
@@ -96,6 +109,7 @@ class VRP {
   public:
   vector<Point> node;
   vector<weight_t> dist;
+  Params params;
 
   size_t getSize() const {
     return size;
@@ -105,8 +119,8 @@ class VRP {
   }
 };
 
-// One time computation to compute distances between every pair of nodes.
-Decision to round or not round is actioned here
+//~ One time computation to compute distances between every pair of nodes.
+//~ Decision to round or not round is actioned here
 std::vector<std::vector<Edge>>
 VRP::cal_graph_dist() {
   //std::cout<< "size:" << (size*(size-1))/2 << '\n';
@@ -122,7 +136,8 @@ VRP::cal_graph_dist() {
       //~ printf("%zd %zd: (%lf-%lf)^2 - (%lf-%lf)^2\n",i,j,node[i].x, node[j].x,node[i].y, node[j].y);
       weight_t w = sqrt(((node[i].x - node[j].x) * (node[i].x - node[j].x)) + ((node[i].y - node[j].y) * (node[i].y - node[j].y)));
 
-      dist[k] = w;
+      dist[k] = (params.toRound ? round(w) : w); //TO round or not to. 
+      
       nG[i].push_back(Edge(j, w));
       nG[j].push_back(Edge(i, w));
       //~ printf("k=%zd d[%zd][%zd]=%lf\n",k,i,j,w);
@@ -672,6 +687,24 @@ bool verify_sol(const VRP &vrp, vector<vector<node_t>> final_routes, unsigned ca
 
 int main(int argc, char *argv[]) {
   VRP vrp;
+  if (argc < 2) {
+    std::cout << "seqMDS version 1.1" << '\n';
+    std::cout << "Usage: " << argv[0] << " toy.vrp [-round 0 or 1 DEFAULT:1 means round it!]" << '\n';
+    exit(1);
+  }
+  
+  for(int ii = 2; ii < argc ; ii+=2){
+    if (std::string(argv[ii]) == "-round")
+					vrp.params.toRound = atoi(argv[ii+1]) ;
+    else {
+      std::cerr<< "INVALID Arguments!" << '\n';
+      std::cerr<< "Usage:" << argv[0] << " toy.vrp -round 1" << '\n';
+      exit(1);
+    }
+  }
+  
+  std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << '\n';
+
   vrp.read(argv[1]);
   chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 
