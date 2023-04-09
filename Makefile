@@ -5,7 +5,9 @@ parMDS: parMDS.cpp
 	
 seqMDS: seqMDS.cpp
 	g++ -O3 -std=c++14 seqMDS.cpp -o seqMDS.out && ./seqMDS.out toy.vrp
-	
 
 clean:
 	rm -f *.out
+
+cleanFolders:
+	rm -rf outinputs*
