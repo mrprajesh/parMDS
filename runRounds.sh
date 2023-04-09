@@ -26,7 +26,7 @@ do
   fi
   
   ## EXECUTION
-  #~ ./$EXENAME.out $file -round $isROUND > $OUTDIR/$fileName.sol 2>> $OUTDIR/time.txt
+  ./$EXENAME.out $file -round $isROUND > $OUTDIR/$fileName.sol 2>> $OUTDIR/time.txt
   
   echo $file - Done
 done
