@@ -703,7 +703,7 @@ int main(int argc, char *argv[]) {
     }
   }
   
-  std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << '\n';
+  //~ std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << '\n';
 
   vrp.read(argv[1]);
   chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
