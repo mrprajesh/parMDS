@@ -28,7 +28,7 @@ do
   ## EXECUTION
   ./$EXENAME.out $file -round $isROUND > $OUTDIR/$fileName.sol 2>> $OUTDIR/time.txt
   
-  echo $file - Done
+  echo $file - Done $isROUND
 done
 sort $OUTDIR/time.txt
 
