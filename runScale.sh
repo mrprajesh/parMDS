@@ -25,9 +25,9 @@ touch $OUTDIR/time.txt
 #~ X-n1001-k43 X-n979-k58 Golden12 Golden16 Brussels2 Flanders2 P-n101-k4 CMT5
 #~ X-n1001-k43 Golden16 Flanders2 CMT5
 
-for f in X-n1001-k43 Golden16 Flanders2 CMT5 #`ls -Sr $INPDIR/*.vrp` 
+for f in X-n1001-k43 Golden_16 Flanders2 CMT5 #`ls -Sr $INPDIR/*.vrp` 
 do
-  file =$INPDIR/$f.vrp 
+  file=$INPDIR/$f.vrp 
   # GET the filename with extension removing foldername prefix.
   fileName=$(echo $file | awk -F[./] '{print $(NF-1)}')
   
@@ -42,7 +42,7 @@ do
   for nTHREADS in 1 2 4 8 16 24 32 40
   do
     # EXECUTION
-    ./$EXENAME.out $file -nthreads $nTHREADS -round $isROUND > $OUTDIR/$fileName.sol 2>> $OUTDIR/time.txt
+    ./$EXENAME.out $file -nthreads $nTHREADS -round $isROUND > $OUTDIR/$fileName-$nTHREADS.sol 2>> $OUTDIR/time.txt
     cat $OUTDIR/time.txt | tail -1 | cut -f1,5,9 -d' ' >> $OUTDIR/comm-time.txt
   done
   echo $file - Done $isROUND
