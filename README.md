@@ -9,10 +9,10 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 # How to run
 
 ```
-bash ./runAll.sh
+bash ./runRounds.sh
 ```
 
-- Runs both seqMDS and parMDS on all 130 inputs
+- Runs both seqMDS and parMDS on all 130 inputs using round conventions.
 - Create .sol files for each instances.
 - Create a folder `output*` and places all .log and .sol files.
 - Create a time.txt file which contains Cost and Time of all instances.
