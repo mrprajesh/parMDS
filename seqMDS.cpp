@@ -1,6 +1,6 @@
 //~~~START:Thu, 16-Jun-2022, 12:43:32 IST
 // For GECCO'23 Submission.
-// g++ -O3 -Wall -o "seqMDS".out "seqMDS.cpp"  -std=c++14  
+// g++ -O3 -Wall -o "seqMDS".out "seqMDS.cpp"  -std=c++14
 
 /*
  * Rajesh Pandian M | https://mrprajesh.co.in
@@ -8,7 +8,7 @@
  * Rupesh Nasre     | www.cse.iitm.ac.in/~rupesh
  * N.S.Narayanaswamy| www.cse.iitm.ac.in/~swamy
  * MIT LICENSE
- */ 
+ */
 #include <iostream>
 #include <vector>
 #include <set>
@@ -20,7 +20,6 @@
 #include <fstream>
 #include <sstream>  //stringstream
 
-
 #include <random>
 #include <chrono>  //timing CPU
 
@@ -28,7 +27,6 @@ unsigned DEBUGCODE = 0;
 #define DEBUG if (DEBUGCODE)
 
 using namespace std;
- 
 
 //~ Define types
 using point_t = double;
@@ -39,14 +37,14 @@ using node_t = int;  // let's keep as int than unsigned. -1 is init. nodes ids 0
 const node_t DEPOT = 0;  // CVRP depot is always assumed to be zero.
 
 // Cmdline params
-class Params{
-public:
-  Params(){
-    toRound  = 1 ; // DEFAULT is round
+class Params {
+  public:
+  Params() {
+    toRound = 1;  // DEFAULT is round
     //~ nThreads = 20; // DEFAULT is 20 OMP threads
   }
-  ~Params(){}
-  
+  ~Params() {}
+
   bool toRound;
   //~ short nThreads;
 };
@@ -75,7 +73,7 @@ class Point {
   demand_t demand;
 };
 
-// To Hold the contents input.vrp 
+// To Hold the contents input.vrp
 class VRP {
   size_t size;
   demand_t capacity;
@@ -136,8 +134,8 @@ VRP::cal_graph_dist() {
       //~ printf("%zd %zd: (%lf-%lf)^2 - (%lf-%lf)^2\n",i,j,node[i].x, node[j].x,node[i].y, node[j].y);
       weight_t w = sqrt(((node[i].x - node[j].x) * (node[i].x - node[j].x)) + ((node[i].y - node[j].y) * (node[i].y - node[j].y)));
 
-      dist[k] = (params.toRound ? round(w) : w); //TO round or not to. 
-      
+      dist[k] = (params.toRound ? round(w) : w);  //TO round or not to.
+
       nG[i].push_back(Edge(j, w));
       nG[j].push_back(Edge(i, w));
       //~ printf("k=%zd d[%zd][%zd]=%lf\n",k,i,j,w);
@@ -160,7 +158,7 @@ void VRP::print_dist() {
   }
 }
 
-// Parsing/Reading the .vrp file! 
+// Parsing/Reading the .vrp file!
 unsigned VRP::read(string filename) {
   ifstream in(filename);
   if (!in.is_open()) {
@@ -174,7 +172,6 @@ unsigned VRP::read(string filename) {
   // DIMENSION
   getline(in, line);
   size = stof(line.substr(line.find(":") + 2));
-
 
   // DISTANCE TYPE
   getline(in, line);
@@ -206,7 +203,6 @@ unsigned VRP::read(string filename) {
     iss >> id >> xStr >> yStr;
     node[i].x = stof(xStr);
     node[i].y = stof(yStr);
-
   }
 
   // skip DEMAND_SECTION
@@ -297,7 +293,6 @@ PrimsAlgo(const VRP &vrp, std::vector<std::vector<Edge>> &graph) {
   return nG;
 }
 
-
 // Graph's Adjacency information.
 void printAdjList(const std::vector<std::vector<Edge>> &graph) {
   int i = 0;
@@ -365,14 +360,13 @@ weight_t calRouteValue(const VRP &vrp, const std::vector<node_t> &aRoute, node_t
   return routeVal;
 }
 
-
 // Print in DIMACS output format http://dimacs.rutgers.edu/programs/challenge/vrp/cvrp/
 // Depot is 0
 // Route #1: 1 2 3
-// Route #2: 4 5 
+// Route #2: 4 5
 // ...
-// Route #k: n-1 n 
-// 
+// Route #k: n-1 n
+//
 void printOutput(const VRP &vrp, const std::vector<std::vector<node_t>> &final_routes) {
   weight_t total_cost = 0.0;
 
@@ -390,16 +384,12 @@ void printOutput(const VRP &vrp, const std::vector<std::vector<node_t>> &final_r
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][0]);
 
     for (unsigned jj = 1; jj < final_routes[ii].size(); ++jj) {
-
       curr_route_cost += vrp.get_dist(final_routes[ii][jj - 1], final_routes[ii][jj]);
-
-
     }
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][final_routes[ii].size() - 1]);
 
     total_cost += curr_route_cost;
   }
-
 
   std::cout << "Cost " << total_cost << std::endl;
 }
@@ -484,7 +474,6 @@ void tsp_2opt(const VRP &vrp, std::vector<node_t> &cities, std::vector<node_t> &
     best_distance += vrp.get_dist(DEPOT, cities[0]);  // computing distance of the first point in the route with the depot.
 
     for (unsigned jj = 1; jj < ncities; ++jj) {
-
       best_distance += vrp.get_dist(cities[jj - 1], cities[jj]);
     }
 
@@ -510,7 +499,6 @@ void tsp_2opt(const VRP &vrp, std::vector<node_t> &cities, std::vector<node_t> &
 
         new_distance += vrp.get_dist(DEPOT, tour[0]);
         for (unsigned jj = 1; jj < ncities; ++jj) {
-
           new_distance += vrp.get_dist(tour[jj - 1], tour[jj]);
         }
 
@@ -565,7 +553,6 @@ weight_t get_total_cost_of_routes(const VRP &vrp, vector<vector<node_t>> &final_
 
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][0]);
     for (unsigned jj = 1; jj < final_routes[ii].size(); ++jj) {
-
       curr_route_cost += vrp.get_dist(final_routes[ii][jj - 1], final_routes[ii][jj]);
     }
 
@@ -605,7 +592,6 @@ postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes) {
 
     postprocessed_route2_cost += vrp.get_dist(DEPOT, postprocessed_route2[0]);  // computing distance of the first point in the route with the depot.
     for (unsigned jj = 1; jj < sz2; ++jj) {
-
       postprocessed_route2_cost += vrp.get_dist(postprocessed_route2[jj - 1], postprocessed_route2[jj]);
     }
 
@@ -617,7 +603,6 @@ postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes) {
 
     postprocessed_route3_cost += vrp.get_dist(DEPOT, postprocessed_route3[0]);
     for (unsigned jj = 1; jj < sz3; ++jj) {
-
       postprocessed_route3_cost += vrp.get_dist(postprocessed_route3[jj - 1], postprocessed_route3[jj]);
     }
 
@@ -632,7 +617,6 @@ postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes) {
       postprocessed_final_routes.push_back(postprocessed_route3);
     }
   }
-
 
   return postprocessed_final_routes;
 }
@@ -692,35 +676,29 @@ int main(int argc, char *argv[]) {
     std::cout << "Usage: " << argv[0] << " toy.vrp [-round 0 or 1 DEFAULT:1 means round it!]" << '\n';
     exit(1);
   }
-  
-  for(int ii = 2; ii < argc ; ii+=2){
+
+  for (int ii = 2; ii < argc; ii += 2) {
     if (std::string(argv[ii]) == "-round")
-					vrp.params.toRound = atoi(argv[ii+1]) ;
+      vrp.params.toRound = atoi(argv[ii + 1]);
     else {
-      std::cerr<< "INVALID Arguments!" << '\n';
-      std::cerr<< "Usage:" << argv[0] << " toy.vrp -round 1" << '\n';
+      std::cerr << "INVALID Arguments!" << '\n';
+      std::cerr << "Usage:" << argv[0] << " toy.vrp -round 1" << '\n';
       exit(1);
     }
   }
-  
+
   //~ std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << '\n';
 
   vrp.read(argv[1]);
   chrono::high_resolution_clock::time_point start = chrono::high_resolution_clock::now();
 
-  
   auto cG = vrp.cal_graph_dist();  // complete graph.
 
-  
-
   auto mstG = PrimsAlgo(vrp, cG);
-  
 
   std::vector<bool> visited(mstG.size(), false);
   visited[0] = true;
   std::vector<int> singleRoute;
-
-  
 
   weight_t minCost = INT_MAX * 1.0f;
   std::vector<std::vector<node_t>> minRoute;
@@ -728,27 +706,22 @@ int main(int argc, char *argv[]) {
   for (int i = 0; i < 100000; ++i) {
     // RANDOMIZE THE ADJ LIST OF MST
     for (auto &list : mstG) {
-  
       std::shuffle(list.begin(), list.end(), std::default_random_engine(rand()));
-  
     }
 
     //reset
     singleRoute.clear();
-  
+
     std::vector<bool> visited(mstG.size(), false);
     visited[0] = true;
 
     ShortCircutTour(mstG, visited, 0, singleRoute);  //a DFS
     DEBUG std::cout << '\n';
 
-  
-
     auto aRoutes = convertToVrpRoutes(vrp, singleRoute);
 
-  
     auto aCostRoute = calCost(vrp, aRoutes);
-  
+
     if (aCostRoute.first < minCost) {
       minCost = aCostRoute.first;
       minRoute = aCostRoute.second;
@@ -757,7 +730,7 @@ int main(int argc, char *argv[]) {
 
   auto postRoutes = postProcessIt(vrp, minRoute);
   chrono::high_resolution_clock::time_point end = chrono::high_resolution_clock::now();
-  
+
   uint64_t elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
   double total_time = (double)(elapsed * 1.E-9);
   std::cerr << argv[1];

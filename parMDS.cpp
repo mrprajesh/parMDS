@@ -7,7 +7,7 @@
  * Rupesh Nasre     | www.cse.iitm.ac.in/~rupesh
  * N.S.Narayanaswamy| www.cse.iitm.ac.in/~swamy
  * MIT LICENSE
- */ 
+ */
 
 #include <iostream>
 #include <vector>
@@ -28,7 +28,6 @@ unsigned DEBUGCODE = 0;
 
 using namespace std;
 
-
 //~ Define types
 using point_t = double;
 using weight_t = double;
@@ -38,14 +37,14 @@ using node_t = int;  // let's keep as int than unsigned. -1 is init. nodes ids 0
 const node_t DEPOT = 0;  // CVRP depot is always assumed to be zero.
 
 // To store all cmd line params in one struct
-class Params{
-public:
-  Params(){
-    toRound  = 1 ; // DEFAULT is round
-    nThreads = 20; // DEFAULT is 20 OMP threads
+class Params {
+  public:
+  Params() {
+    toRound = 1;    // DEFAULT is round
+    nThreads = 20;  // DEFAULT is 20 OMP threads
   }
-  ~Params(){}
-  
+  ~Params() {}
+
   bool toRound;
   short nThreads;
 };
@@ -74,7 +73,7 @@ class Point {
   demand_t demand;
 };
 
-// To Hold the contents input.vrp 
+// To Hold the contents input.vrp
 class VRP {
   size_t size;
   demand_t capacity;
@@ -131,14 +130,13 @@ VRP::cal_graph_dist() {
   for (size_t i = 0; i < size; ++i) {
     for (size_t j = i + 1; j < size; ++j) {
       weight_t w = sqrt(((node[i].x - node[j].x) * (node[i].x - node[j].x)) + ((node[i].y - node[j].y) * (node[i].y - node[j].y)));
-        
-      dist[k] = (params.toRound ? round(w) : w); //TO round or not to. 
-      
+
+      dist[k] = (params.toRound ? round(w) : w);  //TO round or not to.
+
       nG[i].push_back(Edge(j, w));
       nG[j].push_back(Edge(i, w));
       //~ printf("k=%zd d[%zd][%zd]=%lf\n",k,i,j,w);
       k++;
-
     }
   }
   //~ cout << "k = " << k << endl;
@@ -156,7 +154,7 @@ void VRP::print_dist() {
   }
 }
 
-// Parsing/Reading the .vrp file! 
+// Parsing/Reading the .vrp file!
 unsigned VRP::read(string filename) {
   ifstream in(filename);
   if (!in.is_open()) {
@@ -202,7 +200,6 @@ unsigned VRP::read(string filename) {
     iss >> id >> xStr >> yStr;
     node[i].x = stof(xStr);
     node[i].y = stof(yStr);
-
   }
 
   // skip DEMAND_SECTION
@@ -361,9 +358,9 @@ weight_t calRouteValue(const VRP &vrp, const std::vector<node_t> &aRoute, node_t
 // Print in DIMACS output format http://dimacs.rutgers.edu/programs/challenge/vrp/cvrp/
 // Depot is 0
 // Route #1: 1 2 3
-// Route #2: 4 5 
+// Route #2: 4 5
 // ...
-// Route #k: n-1 n   
+// Route #k: n-1 n
 //
 void printOutput(const VRP &vrp, const std::vector<std::vector<node_t>> &final_routes) {
   weight_t total_cost = 0.0;
@@ -382,16 +379,12 @@ void printOutput(const VRP &vrp, const std::vector<std::vector<node_t>> &final_r
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][0]);
 
     for (unsigned jj = 1; jj < final_routes[ii].size(); ++jj) {
-
       curr_route_cost += vrp.get_dist(final_routes[ii][jj - 1], final_routes[ii][jj]);
-
-
     }
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][final_routes[ii].size() - 1]);
 
     total_cost += curr_route_cost;
   }
-
 
   std::cout << "Cost " << total_cost << std::endl;
 }
@@ -407,7 +400,7 @@ void tsp_approx(const VRP &vrp, std::vector<node_t> &cities, std::vector<node_t>
 
   tour[0] = cities[ncities - 1];
 
-  for (i = 1; i < ncities; i++) { 
+  for (i = 1; i < ncities; i++) {
     weight_t ThisX = vrp.node[tour[i - 1]].x;
     weight_t ThisY = vrp.node[tour[i - 1]].y;
     CloseDist = DBL_MAX;
@@ -437,7 +430,7 @@ postprocess_tsp_approx(const VRP &vrp, std::vector<std::vector<node_t>> &solRout
   unsigned nroutes = solRoutes.size();
   for (unsigned i = 0; i < nroutes; ++i) {
     // postprocessing solRoutes[i]
-    unsigned sz = solRoutes[i].size(); 
+    unsigned sz = solRoutes[i].size();
     std::vector<node_t> cities(sz + 1);
     std::vector<node_t> tour(sz + 1);
 
@@ -572,7 +565,7 @@ weight_t get_total_cost_of_routes(const VRP &vrp, vector<vector<node_t>> &final_
 // MAIN POST PROCESS ROUTINE
 //
 std::vector<std::vector<node_t>>
-postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes, weight_t & minCost) {
+postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes, weight_t &minCost) {
   std::vector<std::vector<node_t>> postprocessed_final_routes;
 
   auto postprocessed_final_routes1 = postprocess_tsp_approx(vrp, final_routes);
@@ -624,24 +617,23 @@ postProcessIt(const VRP &vrp, std::vector<std::vector<node_t>> &final_routes, we
     }
   }
 
-  auto postprocessed_final_routes_cost = get_total_cost_of_routes (vrp,postprocessed_final_routes);
+  auto postprocessed_final_routes_cost = get_total_cost_of_routes(vrp, postprocessed_final_routes);
 
   minCost = postprocessed_final_routes_cost;
-  
+
   return postprocessed_final_routes;
 }
 
- 
 std::pair<weight_t, std::vector<std::vector<node_t>>>
 calCost(const VRP &vrp, const std::vector<std::vector<node_t>> &final_routes) {
   weight_t total_cost = 0.0;
 
-  #pragma omp parallel for reduction(+ : total_cost)
+#pragma omp parallel for reduction(+ : total_cost)
   for (unsigned ii = 0; ii < final_routes.size(); ++ii) {
     weight_t curr_route_cost = 0;
     curr_route_cost += vrp.get_dist(DEPOT, final_routes[ii][0]);
 
-    #pragma omp parallel for reduction(+ : curr_route_cost)
+#pragma omp parallel for reduction(+ : curr_route_cost)
     for (unsigned jj = 1; jj < final_routes[ii].size(); ++jj) {
       curr_route_cost += vrp.get_dist(final_routes[ii][jj - 1], final_routes[ii][jj]);
     }
@@ -693,19 +685,19 @@ int main(int argc, char *argv[]) {
     std::cout << "Usage: " << argv[0] << " toy.vrp [-nthreads <n> DEFAULT is 20] [-round 0 or 1 DEFAULT:1]" << '\n';
     exit(1);
   }
-  
-  for(int ii = 2; ii < argc ; ii+=2){
+
+  for (int ii = 2; ii < argc; ii += 2) {
     if (std::string(argv[ii]) == "-round")
-					vrp.params.toRound = atoi(argv[ii+1]) ;
+      vrp.params.toRound = atoi(argv[ii + 1]);
     else if (std::string(argv[ii]) == "-nthreads")
-					vrp.params.nThreads = atoi(argv[ii+1]);
+      vrp.params.nThreads = atoi(argv[ii + 1]);
     else {
-      std::cerr<< "INVALID Arguments!" << '\n';
-      std::cerr<< "Usage:" << argv[0] << " toy.vrp -nthreads 20 -round 1" << '\n';
+      std::cerr << "INVALID Arguments!" << '\n';
+      std::cerr << "Usage:" << argv[0] << " toy.vrp -nthreads 20 -round 1" << '\n';
       exit(1);
     }
   }
-  
+
   // DEBUG
   // std::cout<< "Round:" << (vrp.params.toRound?"True":"False") << " nThreads:" << vrp.params.nThreads << '\n';
 
@@ -729,81 +721,76 @@ int main(int argc, char *argv[]) {
   weight_t minCost = INT_MAX * 1.0f;
   std::vector<std::vector<node_t>> minRoute;
 
-
   // Okay! as it happens only once.
   auto mstCopy = mstG;
-  
+
   for (int i = 0; i < 1; i++) {
-      // RANDOMIZE THE ADJ LIST OF MST
-      for (auto &list : mstCopy) {  //& indicates the exiting mst list will be modified and subsequent Shortcircuit computation
-        std::shuffle(list.begin(), list.end(), std::default_random_engine(0));  // rand()
-      }
+    // RANDOMIZE THE ADJ LIST OF MST
+    for (auto &list : mstCopy) {                                              //& indicates the exiting mst list will be modified and subsequent Shortcircuit computation
+      std::shuffle(list.begin(), list.end(), std::default_random_engine(0));  // rand()
+    }
 
-      std::vector<int> singleRoute;
+    std::vector<int> singleRoute;
 
-      std::vector<bool> visited(mstCopy.size(), false);
-      visited[0] = true;
+    std::vector<bool> visited(mstCopy.size(), false);
+    visited[0] = true;
 
-      ShortCircutTour(mstCopy, visited, 0, singleRoute);  //a DFS //Write singleRoute
-      DEBUG std::cout << '\n';
+    ShortCircutTour(mstCopy, visited, 0, singleRoute);  //a DFS //Write singleRoute
+    DEBUG std::cout << '\n';
 
-      auto aRoutes = convertToVrpRoutes(vrp, singleRoute);
+    auto aRoutes = convertToVrpRoutes(vrp, singleRoute);
 
-      //~ std::vector< std::vector<float>> aRoutes={{1,4},{3,2,5}};
-      auto aCostRoute = calCost(vrp, aRoutes);
-      if (aCostRoute.first < minCost) {
-        minCost = aCostRoute.first;
-        minRoute = aCostRoute.second;
-      }
+    //~ std::vector< std::vector<float>> aRoutes={{1,4},{3,2,5}};
+    auto aCostRoute = calCost(vrp, aRoutes);
+    if (aCostRoute.first < minCost) {
+      minCost = aCostRoute.first;
+      minRoute = aCostRoute.second;
+    }
   }
-  
+
   // UPTO1
   auto minCost1 = minCost;
-  
-  // END TIMER 
+
+  // END TIMER
   std::chrono::high_resolution_clock::time_point end = std::chrono::high_resolution_clock::now();
   uint64_t elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-  
+
   auto timeUpto1 = (double)(elapsed * 1.E-9);
   //~ short PARLIMIT = ((argc == 3) ? stoi(argv[2]) : 20);  //Default stride is 20 if arg 3 is not provided!
   short PARLIMIT = vrp.params.nThreads;
-  
-#pragma omp parallel for shared(minCost, minRoute)   
 
-  for (int i = 0; i < 100000; i += PARLIMIT) {   // 10^5 is chosen empirically beyond which the solution quality improves very merge amount!
-      for (auto &list : mstCopy) {  //& indicates the exiting mst list will be modified and subsequent Shortcircuit computation
-        std::shuffle(list.begin(), list.end(), std::default_random_engine(rand()));  //seed | i | rand()  // DEFAULT is rand
-      }
+#pragma omp parallel for shared(minCost, minRoute) num_threads(PARLIMIT)
+  for (int i = 0; i < 100000; i += PARLIMIT) {                                     // 10^5 is chosen empirically beyond which the solution quality improves very merge amount!
+    for (auto &list : mstCopy) {                                                   //& indicates the exiting mst list will be modified and subsequent Shortcircuit computation
+      std::shuffle(list.begin(), list.end(), std::default_random_engine(rand()));  //seed | i | rand()  // DEFAULT is rand
+    }
 
-      //reset
-      //~ singleRoute.clear();
-      std::vector<int> singleRoute;
+    //reset
+    //~ singleRoute.clear();
+    std::vector<int> singleRoute;
 
-      std::vector<bool> visited(mstCopy.size(), false);
-      visited[0] = true;
+    std::vector<bool> visited(mstCopy.size(), false);
+    visited[0] = true;
 
-      ShortCircutTour(mstCopy, visited, 0, singleRoute);  //a DFS //Write singleRoute
-      DEBUG std::cout << '\n';
+    ShortCircutTour(mstCopy, visited, 0, singleRoute);  //a DFS //Write singleRoute
+    DEBUG std::cout << '\n';
 
-      auto aRoutes = convertToVrpRoutes(vrp, singleRoute);
+    auto aRoutes = convertToVrpRoutes(vrp, singleRoute);
 
-      //~ std::vector< std::vector<float>> aRoutes={{1,4},{3,2,5}};
-      auto aCostRoute = calCost(vrp, aRoutes);
-      if (aCostRoute.first < minCost) {
-        minCost = aCostRoute.first;
-        minRoute = aCostRoute.second;
-      }
-
-    
+    //~ std::vector< std::vector<float>> aRoutes={{1,4},{3,2,5}};
+    auto aCostRoute = calCost(vrp, aRoutes);
+    if (aCostRoute.first < minCost) {
+      minCost = aCostRoute.first;
+      minRoute = aCostRoute.second;
+    }
   }
-  
 
   //// UPTO2
-  //   END TIMER 
+  //   END TIMER
   auto minCost2 = minCost;
   end = std::chrono::high_resolution_clock::now();
   elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-  
+
   auto timeUpto2 = (double)(elapsed * 1.E-9);
 
   auto postRoutes = postProcessIt(vrp, minRoute, minCost);
@@ -811,29 +798,31 @@ int main(int argc, char *argv[]) {
   // END TIMER ALL
   end = std::chrono::high_resolution_clock::now();
   elapsed = std::chrono::duration_cast<std::chrono::nanoseconds>(end - start).count();
-  
+
   double total_time = (double)(elapsed * 1.E-9);
-  
+
   /// VALIDATION
   bool verified = false;
   verified = verify_sol(vrp, postRoutes, vrp.getCapacity());
-  
+
   // Cost after Step 1, Step 2 & 3, and Step 4.
-  std::cerr << argv[1] << " Cost " ;
+  std::cerr << argv[1] << " Cost ";
   std::cerr << minCost1 << ' ';
   std::cerr << minCost2 << ' ';
-  std::cerr << minCost; 
-  
+  std::cerr << minCost;
+
   // Execution time after Step 1, Step 2 & 3, and Step 4.
-  std::cerr << " Time(seconds) " ;
+  std::cerr << " Time(seconds) ";
   std::cerr << timeUpto1 << ' ';
   std::cerr << timeUpto2 << ' ';
-  std::cerr << total_time; 
-    
+  std::cerr << total_time;
+
+  std::cerr << " parLimit " << PARLIMIT;
+
   if (verified)
     std::cerr << " VALID" << std::endl;
   else
-    std::cerr << " INVALID"<< std::endl;
+    std::cerr << " INVALID" << std::endl;
 
   // PRINT ANS
   printOutput(vrp, postRoutes);
