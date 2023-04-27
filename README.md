@@ -8,9 +8,41 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 
 # How to run
 
+## Build and run executable
+```
+## To compile. Runs toy example on parMDS & seqMDS 
+
+make
+
+## To run the executable
+
+./seqMDS.out toy.vrp [-round 0 or 1 DEFAULT:1 means round it!]
+./parMDS.out toy.vrp [-nthreads <n> DEFAULT is 20] [-round 0 or 1 DEFAULT:1]
+
+
+## An example
+./parMDS.out inputs/Antwerp1.vrp -nthreads 16 -round 1
+
+
+## Output Description
+
+//Stats printed on std err whereas solution on std out
+inputs/Antwerp1.vrp Cost 556105 548740 518042 Time(seconds) 0.599911 2.18137 2.19818 parLimit 16 VALID    
+
+Route #1: ..
+Route #2: ..
+...
+Route #k:
+Cost <val>
+
+```
+
+## Build and run paper's artifact
+
 ```
 bash ./runRounds.sh
 ```
+
 
 - Runs both seqMDS and parMDS on all 130 inputs using round conventions.
 - Create .sol files for each instances.
