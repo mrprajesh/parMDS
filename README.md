@@ -2,23 +2,23 @@
 Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 
 
-# Publication
+## Publication
 
 **Effective Parallelization of the Vehicle Routing Problem**, 
 <ins>Rajesh Pandian M </ins>, Somesh Singh, Rupesh Nasre. and N.S. Narayanaswamy,
 *Genetic and Evolutionary Computation Conference* **(GECCO)**, 2023.
 [(DOI)](https://doi.org/10.1145/3583131.3590458) [(Slides)](#) [(Video)](#) //TODO
 
-# Requirements  
+## Requirements  
 
 - parMDS: [NVIDIA's HPC SDK](https://developer.nvidia.com/hpc-sdk) . Has `nvc++`  compiler
 - seqMDS: GCC 7+. Tested on GCC 9.3.1
 - Should work on every Linux Distribution. Tested on Ubuntu 22.04.
 
 
-# How to run
+## How to run
 
-## Build and run executable
+### Build and run executable
 ```
 ## To compile. Runs toy example on parMDS & seqMDS 
 
@@ -32,13 +32,12 @@ make
 
 ## An example
 ./parMDS.out inputs/Antwerp1.vrp -nthreads 16 -round 1
-
+./seqMDS.out toy.vrp -round 0
 
 ## Output Description
 
-//Stats printed on std err whereas solution on std out
+//One line stats printed on std err whereas the solution on std out
 inputs/Antwerp1.vrp Cost 556105 548740 518042 Time(seconds) 0.599911 2.18137 2.19818 parLimit 16 VALID    
-
 Route #1: ..
 Route #2: ..
 ...
@@ -47,7 +46,7 @@ Cost <val>
 
 ```
 
-## Build and run paper's artifact
+### Build and run paper's artifact
 
 ```
 bash ./runRounds.sh
@@ -62,7 +61,7 @@ bash ./runRounds.sh
 
 
 
-# Authors 
+## Authors 
  * Rajesh Pandian M | https://mrprajesh.co.in
  * Somesh Singh     | https://ssomesh.github.io
  * Rupesh Nasre     | www.cse.iitm.ac.in/~rupesh
