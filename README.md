@@ -1,5 +1,5 @@
 # parMDS
-Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
+Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper at [https://dl.acm.org/doi/10.1145/3583131.3590458](https://dl.acm.org/doi/10.1145/3583131.3590458).
 
 
 ## Publication
@@ -9,6 +9,8 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 *Genetic and Evolutionary Computation Conference* **(GECCO)**, 2023.
  
  [(Preprint)](https://mrprajesh.co.in/pdfs/CVRP_v4.pdf) [(DOI)](https://dl.acm.org/doi/10.1145/3583131.3590458) [(Slides)](https://mrprajesh.co.in/pdfs/gecco-cvrp-v3.pdf) [(Video)](https://youtu.be/IWgqRR-UO6U) [(Code)](https://github.com/mrprajesh/parMDS)
+
+<iframe width="560" height="315" src="https://www.youtube.com/embed/IWgqRR-UO6U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
 ## Requirements  
 
