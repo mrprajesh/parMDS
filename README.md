@@ -7,9 +7,8 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 **Effective Parallelization of the Vehicle Routing Problem**, 
 <ins>Rajesh Pandian M </ins>, Somesh Singh, Rupesh Nasre. and N.S. Narayanaswamy,
 *Genetic and Evolutionary Computation Conference* **(GECCO)**, 2023.
- [(Preprint)](https://mrprajesh.co.in/pdfs/CVRP_v4.pdf) 
-
- //TODO Later! [(DOI)]() [(Slides)]() [(Video)]() 
+ 
+ [(Preprint)](https://mrprajesh.co.in/pdfs/CVRP_v4.pdf) [(DOI)](https://dl.acm.org/doi/10.1145/3583131.3590458) [(Slides)](https://mrprajesh.co.in/pdfs/gecco-cvrp-v3.pdf) [(Video)](https://youtu.be/IWgqRR-UO6U) [(Code)](https://github.com/mrprajesh/parMDS)
 
 ## Requirements  
 
