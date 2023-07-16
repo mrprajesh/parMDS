@@ -12,8 +12,8 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 
 ## Requirements  
 
-- parMDS: [NVIDIA's HPC SDK](https://developer.nvidia.com/hpc-sdk) . Has `nvc++`  compiler
-- seqMDS: GCC 7+. Tested on GCC 9.3.1
+- seqMDS (sequential version): GCC 7+. Tested on GCC 9.3.1
+- parMDS (parallel OpenMP): We used `nvc++` compiler from [NVIDIA's HPC SDK](https://developer.nvidia.com/hpc-sdk).
 - Should work on every Linux Distribution. Tested on Ubuntu 22.04.
 
 
