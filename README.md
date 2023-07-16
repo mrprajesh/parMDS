@@ -12,6 +12,10 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper at 
 
 [![YouTube](https://img.youtube.com/vi/IWgqRR-UO6U/0.jpg)]([https://www.youtube.com/watch?v=IWgqRR-UO6U](https://www.youtube.com/embed/IWgqRR-UO6U))
 
+[![YouTube Link](http://img.youtube.com/vi/IWgqRR-UO6U/0.jpg)](http://www.youtube.com/watch?v=IWgqRR-UO6U "YouTube Link")
+
+
+
 ## Requirements  
 
 - Should work on every Linux Distribution. Tested on Ubuntu 22.04.
