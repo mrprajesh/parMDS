@@ -12,18 +12,20 @@ Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper.
 
 ## Requirements  
 
-- seqMDS (sequential version): GCC 7+. Tested on GCC 9.3.1
-- parMDS (parallel OpenMP): We used `nvc++` compiler from [NVIDIA's HPC SDK](https://developer.nvidia.com/hpc-sdk).
 - Should work on every Linux Distribution. Tested on Ubuntu 22.04.
-
+- For seqMDS (sequential version): GCC 7+. Tested on GCC 9.3.1
+- For parMDS (parallel OpenMP): We use `nvc++` compiler from [NVIDIA's HPC SDK](https://developer.nvidia.com/hpc-sdk).
 
 ## How to run
 
-### Build and run executable
+### Build and run the executables
 ```
 ## To compile. Runs toy example on parMDS & seqMDS 
 
 make
+
+## To build and run only seqMDS.
+make seqMDS
 
 ## To run the executable
 
@@ -47,7 +49,7 @@ Cost <val>
 
 ```
 
-### Build and run paper's artifact
+### Build and run the paper's artifact
 
 ```
 bash ./runRounds.sh
@@ -55,10 +57,10 @@ bash ./runRounds.sh
 
 
 - Runs both seqMDS and parMDS on all 130 inputs using round conventions.
-- Create .sol files for each instances.
-- Create a folder `output*` and places all .log and .sol files.
-- Create a time.txt file which contains Cost and Time of all instances.
-- In addition to it, Cost and Time is printed on the terminal as well.
+- Create .sol files for each instance.
+- Create a folder `output*` and place all .log and .sol files.
+- Create a time.txt file which contains the Cost and Time of all instances.
+- In addition to it, Cost and Time are printed on the terminal as well.
 
 
 
