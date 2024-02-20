@@ -1,12 +1,14 @@
 # parMDS
-Effective Parallelization of the Vehicle Routing Problem, a GECCO 2023 Paper at [https://dl.acm.org/doi/10.1145/3583131.3590458](https://dl.acm.org/doi/10.1145/3583131.3590458).
+[![seqMDS](https://github.com/mrprajesh/parMDS/actions/workflows/ubuntu.yml/badge.svg)](https://github.com/mrprajesh/parMDS/actions/workflows/ubuntu.yml)
+
+Effective Parallelization of the Vehicle Routing Problem at [https://dl.acm.org/doi/10.1145/3583131.3590458](https://dl.acm.org/doi/10.1145/3583131.3590458).
 
 
 ## Publication
 
 **Effective Parallelization of the Vehicle Routing Problem**, 
 <ins>Rajesh Pandian M </ins>, Somesh Singh, Rupesh Nasre. and N.S. Narayanaswamy,
-*Genetic and Evolutionary Computation Conference* **(GECCO)**, 2023.
+*Genetic and Evolutionary Computation Conference* **(GECCO)**, 2023. Pages 1036–1044, Lisbon, Portugal. 15-19 July, 2023.
  
  [(DOI)](https://dl.acm.org/doi/10.1145/3583131.3590458) [(Slides)](https://mrprajesh.co.in/pdfs/gecco-cvrp-v3.pdf) [(Video)](https://youtu.be/IWgqRR-UO6U) [(Code)](https://github.com/mrprajesh/parMDS)
 
