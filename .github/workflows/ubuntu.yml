@@ -1,0 +1,21 @@
+name: seqMDS
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main, dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+        
+    - name: Run Make
+      run:  make seqMDS 
+      
+    - name: Run the seqMDS code on toy
+      run:  ./seqMDS.out toy.vrp
+      
+        
